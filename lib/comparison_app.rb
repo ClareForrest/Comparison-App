@@ -2,6 +2,7 @@
 require 'smarter_csv'
 
 class Test
+  #update attrs to be either read or write, not necessarily both
   attr_accessor :name, :bank_statement, :payslips
 
   def initialize(name)
@@ -18,44 +19,27 @@ class Test
   def enter_user_data 
     loop do
       if @payslips[3] == nil
-        puts "please enter your payslip"
+        puts "please enter your payslip date"
         p "> "
-        @payslips << gets.chomp
+        date = gets.chomp
+        amount = gets.chomp
+        date_hash={:datekey => date, :amount_key => amount}
+        @payslips << date_hash
       else
         break
       end
     end
   end 
   
-  # def compare(bank_file, user_file)
-  #   bank_file.each do |line|
-  #   p line
-  #     end
-  #   user_file.each do |number|
-  #     p number
-  #     end 
-  #   end 
-  # def compare(bank_file, user_file)
-  #   bank_file.each do |key, value|
-  #     p key.include? user_file[0]
-  #   end
+  
 
 end
-
-# arr=[1,2,4,3,4]
-# example=[3,4,3,2,1,3,4]
 
 sept = Test.new("september")
 sept.import_csv
 sept.bank_statement
 sept.enter_user_data
-# sept.payslips
-# sept.compare(sept.bank_statement, sept.payslips)
-
-
-  # def display_comparison()
-  # end 
-# end 
+p sept.payslips
 
 # puts "string colour".colorize(:blue)
 # puts "This is light blue with red background".colorize(:color => :light_blue, :background => :red)
