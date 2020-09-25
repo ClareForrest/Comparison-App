@@ -24,21 +24,30 @@ class Test
         p "> "
         date = gets.chomp
         amount = gets.chomp
-        date_hash={:datekey => date, :amount_key => amount}
+        date_hash={:date => date, :amount => amount}
         @payslips << date_hash
       else
         break
       end
     end
+  end 
 
     def compare_method
-      if @bank_statement[0][:date] == @payslips[0][:date]
-        puts "you have a match"
-      else 
-        puts "no match"
+      i = 0
+      loop do
+        while i < @bank_statement.length
+          i = i + 1  
+          if @bank_statement[i][:date] == @payslips[i][:date]
+            puts "you have a match"
+          else 
+            puts "no match"
+            i += i+1
+          end
+        end 
       end 
-    end 
-  end 
+    end
+   
+    
   
   #I want to compare the key values from one hash against the key values of the second hash
   # def compare(bank_data, user_data)
@@ -52,13 +61,7 @@ sept.import_csv
 sept.bank_statement
 sept.enter_user_data
 sept.payslips
-# sept.compare(@bank_statement, @payslips)
+sept.compare_method
 
 # puts "string colour".colorize(:blue)
 # puts "This is light blue with red background".colorize(:color => :light_blue, :background => :red)
-
-if sept.bank_statement[0][:date] == sept.payslips[0][:date]
-  puts "you have a match"
-else 
-  puts "no match"
-end 
