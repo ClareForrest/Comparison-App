@@ -2,30 +2,36 @@
 require 'smarter_csv'
 
 class Test
-  attr_accessor :name, :bank_statement
+  attr_accessor :name, :bank_statement, :payslips
 
   def initialize(name)
     @name = name
     @bank_statement
-    @payslips = {}
+    @payslips = payslips
     @compare_outcome = []
   end 
-  #need to expand on the below so that the smartercsv.process 
+  #need to expand on the below so that the smartercsv.process becomes an actual method 
   def import_csv
-    @bank_statement = SmarterCSV.process('lib/test_file.csv')
+    @bank_statement = SmarterCSV.process('test_file.csv')
   end 
 
-  def
+  def enter_user_data
+    puts "please enter your first payslip"
+    p "> "
+    p payslips=[] << gets.chomp
+  end 
+
 end
+
 
 sept = Test.new("september")
 sept.import_csv
-p sept.bank_statement
-
-
-  # def enter_user_data()
-  # end 
-
+sept.bank_statement
+sept.enter_user_data
+sept.payslips
+# def enter_user_data(argv)
+#   p ARGF.read
+# end 
   # def compare()
   # end 
 
