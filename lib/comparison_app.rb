@@ -18,7 +18,8 @@ class Test
 
   def enter_user_data 
     loop do
-      if @payslips[3] == nil
+      #change the @payslips[index] back to 3
+      if @payslips[1] == nil
         puts "please enter your payslip date"
         p "> "
         date = gets.chomp
@@ -29,17 +30,35 @@ class Test
         break
       end
     end
+
+    def compare_method
+      if @bank_statement[0][:date] == @payslips[0][:date]
+        puts "you have a match"
+      else 
+        puts "no match"
+      end 
+    end 
   end 
   
+  #I want to compare the key values from one hash against the key values of the second hash
+  # def compare(bank_data, user_data)
+    
+  # end 
   
-
 end
 
 sept = Test.new("september")
 sept.import_csv
 sept.bank_statement
 sept.enter_user_data
-p sept.payslips
+sept.payslips
+# sept.compare(@bank_statement, @payslips)
 
 # puts "string colour".colorize(:blue)
 # puts "This is light blue with red background".colorize(:color => :light_blue, :background => :red)
+
+if sept.bank_statement[0][:date] == sept.payslips[0][:date]
+  puts "you have a match"
+else 
+  puts "no match"
+end 
