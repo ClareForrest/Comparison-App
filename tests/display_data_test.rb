@@ -1,4 +1,6 @@
 require_relative '../lib/comparison_app'
+require 'tty-table'
 
 test = ComparisonApp.new("test")
-p test.enter_user_data
+
+p test.display_data

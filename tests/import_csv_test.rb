@@ -1,17 +1,22 @@
-require_relative '../lib/run.rb'
-require_relative '../lib/comparison_app.rb'
+require_relative '../lib/comparison_app'
 
-#Arrange
-sept = Comparison_app.new("september")
+test = ComparisonApp.new("test")
+p test.import_csv
 
-#Act
+# Act
+class Test
 def import_csv
-  @bank_statement = SmarterCSV.process('test_file.csv')
-end
+  puts "Please enter the file path of your stored csv file"
+  users_text = gets.strip
+  stored_file = File.open(users_text)
 
-#Assert
-if @bank_statement == SmarterCSV.process('test_file.csv')
-  puts "Test Passed"
-else 
-  puts "Test Failed"
+  @bank_statement = SmarterCSV.process(stored_file)
+end
 end 
+
+# # Assert
+# if @bank_statement == SmarterCSV.process('test_file.csv')
+#   puts 'Test Passed'
+# else
+#   puts 'Test Failed'
+# end
