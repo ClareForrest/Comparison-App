@@ -1,9 +1,7 @@
-require 'tty-table'
-require 'smarter_csv'
-require 'byebug'
 
 class ComparisonApp
-  attr_writer :name, :bank_statement, :payslips, :orphan_bank_statements, :orphan_payslips, :table
+  attr_writer :name
+  attr_reader :bank_statement, :payslips, :orphan_bank_statements, :orphan_payslips, :table
 
   def initialize(name)
     @name = name
@@ -51,9 +49,9 @@ class ComparisonApp
   end
 
   def enter_user_data
+    i = @bank_statement.length
     loop do
-      # maybe use the number of items in the bank_statement to advise on number of entries
-      if @payslips[3].nil?
+      if @payslips[i].nil?
         puts 'please enter your payslip date'
         print '> '
         date = gets.chomp
@@ -104,6 +102,7 @@ class ComparisonApp
           [statements[:date], statements[:amount]]
         end
         @table = TTY::Table.new(rows: rows)
+        puts "These are the dates and amounts that don't have a match - please follow up with Gail"
         puts @table.render(:ascii)
       else 
         puts "You'll need to enter data to compare"
