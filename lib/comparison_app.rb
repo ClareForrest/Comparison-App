@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 class ComparisonApp
   attr_writer :name
@@ -8,7 +9,7 @@ class ComparisonApp
     @bank_statement = import_csv
     @payslips = []
     @orphan_bank_statements = []
-    @orphan_payslips = orphan_payslips=[]
+    @orphan_payslips = orphan_payslips = []
   end
 
   def menu_selection
@@ -43,9 +44,12 @@ class ComparisonApp
   # need to expand on the below so that the smartercsv.process becomes an actual method
   # ask user to advise on where csv file is stored. Pass this to the .process method
   def import_csv
-    # puts "Please enter the file path of your stored csv file"
+    begin # puts "Please enter the file path of your stored csv file"
     # stored_file = gets
     SmarterCSV.process('bank_statement.csv')
+    rescue 
+      puts "Please upload a bank statement for comparison in CSV format".colorize(:red)
+    end 
   end
 
   def enter_user_data
@@ -67,10 +71,10 @@ class ComparisonApp
   end
 
   def compare_method
-    if @payslips.length == 0
-      puts "Please enter payslip data"
+    if @payslips.length.zero?
+      puts 'Please enter payslip data'
       return
-    end 
+    end
     if @bank_statement.eql? @payslips
       puts 'Data 1 matches Data 2'
     else
@@ -86,26 +90,29 @@ class ComparisonApp
             @orphan_bank_statements << @bank_statement[i]
           end
           if i == @bank_statement.length - 1
-            break 
-          else 
+            break
+          else
             i += 1
-          end 
+          end
         end
-        break 
+        break
       end
     end
   end
-    
-    def display_data
-      if @orphan_bank_statements.length > 1
-        rows = @orphan_bank_statements.map do |statements|
+
+  def display_data
+    if @orphan_bank_statements.length > 1
+      row1 = @orphan_bank_statements.map do |statements|
+        [statements[:date], statements[:amount]]
+      end 
+        row2 = @orphan_payslips.map do |statements|
           [statements[:date], statements[:amount]]
         end
-        @table = TTY::Table.new(rows: rows)
-        puts "These are the dates and amounts that don't have a match - please follow up with Gail"
-        puts @table.render(:ascii)
-      else 
-        puts "You'll need to enter data to compare"
-      end 
-    end   
-end 
+      @table = TTY::Table.new(rows: [row1, row2])
+      puts "These are the dates and amounts that don't have a match".colorize(:yellow)
+      puts @table.render(:ascii)
+    else
+      puts "You'll need to enter data to compare"
+    end
+  end
+end

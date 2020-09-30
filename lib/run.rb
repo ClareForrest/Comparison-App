@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'colorize'
 require 'tty-table'
 require 'tty-prompt'
@@ -7,6 +9,6 @@ require 'set'
 
 require_relative 'comparison_app'
 
-test = ComparisonApp.new("test")
+test = ComparisonApp.new('test')
 table = TTY::Table.new
 test.router
