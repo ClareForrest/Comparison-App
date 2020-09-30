@@ -1,4 +1,5 @@
 require 'tty-table'
+require 'smarter_csv'
 
 class ComparisonApp
   # update attrs to be either read or write, not necessarily both
@@ -6,11 +7,11 @@ class ComparisonApp
 
   def initialize(name)
     @name = name
-    # @bank_statement
+    @bank_statement
     @payslips = []
     @orphan_bank_statements = []
     @orphan_payslips = orphan_payslips=[]
-    @table = table
+    # @table = table
   end
 
   def menu_selection
@@ -81,9 +82,9 @@ class ComparisonApp
               next
             else
               puts 'no match'.colorize(:red)
-              table = TTY::Table.new
-              table << bank_statement[i]
-              table << pdata
+              # table = TTY::Table.new
+              # table << bank_statement[i]
+              # table << pdata
             end
             i += 1
           end
@@ -91,8 +92,14 @@ class ComparisonApp
         end
     end
   end
-
+  
   def display_data
-    puts table.render(:ascii)
+    @bank_statement.each do |hash|
+      table = TTY::Table.new(rows: [hash])
+    p table.render(:basic)
+    end  
+    
+    # table = TTY::Table.new(new_table)
+    # puts table.render(:ascii)
   end 
 end 
