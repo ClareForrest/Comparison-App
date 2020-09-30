@@ -1,17 +1,16 @@
 require 'tty-table'
 require 'smarter_csv'
+require 'byebug'
 
 class ComparisonApp
-  # update attrs to be either read or write, not necessarily both
-  attr_accessor :name, :bank_statement, :payslips, :orphan_bank_statements, :orphan_payslips
+  attr_writer :name, :bank_statement, :payslips, :orphan_bank_statements, :orphan_payslips, :table
 
   def initialize(name)
     @name = name
-    @bank_statement
+    @bank_statement = import_csv
     @payslips = []
     @orphan_bank_statements = []
     @orphan_payslips = orphan_payslips=[]
-    # @table = table
   end
 
   def menu_selection
@@ -48,7 +47,7 @@ class ComparisonApp
   def import_csv
     # puts "Please enter the file path of your stored csv file"
     # stored_file = gets
-    @bank_statement = SmarterCSV.process('bank_statement.csv')
+    SmarterCSV.process('bank_statement.csv')
   end
 
   def enter_user_data
@@ -70,36 +69,44 @@ class ComparisonApp
   end
 
   def compare_method
+    if @payslips.length == 0
+      puts "Please enter payslip data"
+      return
+    end 
     if @bank_statement.eql? @payslips
       puts 'Data 1 matches Data 2'
     else
       i = 0
-        while i < @bank_statement.length
-          @bank_statement[i]
-          @payslips.each do |pdata|
-            if @bank_statement[i] == pdata
-              puts 'bank and payslips match'.colorize(:green)
-              next
-            else
-              puts 'no match'.colorize(:red)
-              # table = TTY::Table.new
-              # table << bank_statement[i]
-              # table << pdata
-            end
-            i += 1
+      loop do
+        @payslips.each do |pdata|
+          if @bank_statement[i] == pdata
+            puts 'bank and payslips match'.colorize(:green)
+            next
+          else
+            puts 'no match'.colorize(:red)
+            @orphan_payslips << pdata
+            @orphan_bank_statements << @bank_statement[i]
           end
-          break
+          if i == @bank_statement.length - 1
+            break 
+          else 
+            i += 1
+          end 
         end
+        break 
+      end
     end
   end
-  
-  def display_data
-    @bank_statement.each do |hash|
-      table = TTY::Table.new(rows: [hash])
-    p table.render(:basic)
-    end  
     
-    # table = TTY::Table.new(new_table)
-    # puts table.render(:ascii)
-  end 
+    def display_data
+      if @orphan_bank_statements.length > 1
+        rows = @orphan_bank_statements.map do |statements|
+          [statements[:date], statements[:amount]]
+        end
+        @table = TTY::Table.new(rows: rows)
+        puts @table.render(:ascii)
+      else 
+        puts "You'll need to enter data to compare"
+      end 
+    end   
 end 
