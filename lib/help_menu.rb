@@ -1,11 +1,4 @@
-require 'optparse'
 VERSION = '1.0.0'
-
-class KissClass
-  def kiss_request 
-
-  end
-end 
 
 options = {}
 
@@ -20,7 +13,8 @@ parser = OptionParser.new do |opts|
   end 
 
   opts.on('-kKISSES', '--kisses=KISSES', 'How many kisses would you like?') do |kisses|
-    options[:kisses] = kisses
+    options[:kiss_request] = kisses
+    puts "You get #{kisses} kisses!"
   end
 
   opts.on('-h', '--help', 'Display this Help') do
@@ -30,11 +24,3 @@ parser = OptionParser.new do |opts|
 end
 
 parser.parse!
-
-if options.has_key?(:kisses)
-  alan = KissClass.new
-  alan.kiss_request
-    options[:kisses] do
-      puts "I want #{:kisses[kisses]} kisses"
-    end
-end
