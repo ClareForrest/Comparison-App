@@ -1,21 +1,46 @@
-require_relative '../lib/comparison_app'
+VERSION = '1.0.0'
 
-# def iterating_orphans(orphans)
-#   orphans.each do |hash|
-#     p hash
-#   end 
-#   end
+options = {}
 
-# iterating_orphans(payslips_test_3)
+class Dice
+  def roll 
+    rand(1..6)
+  end
+end 
 
-# bank_statement = [{ "date" => 1120, "amount" => 1234 }, {"date" => 2220, "amount" => 5678 }, {"date" => 3320, "amount" => 91_011 }]
-# p bank_statement
-bank_statement = [{:date => 1120, :amount => 1234}, {:date => 2220, :amount => 5678}]
-# payslips_test_2 = [{:date => 1120, :amount => 1234}, {:date => 2220, :amount => 12}, {:date => 2220, :amount => 5678}]
-# payslips_test_3 = [{ date: 1120, amount: 1234 }, { date: 2220, amount: 5678 }, { date: 2220, amount: 5678 }]
+parser = OptionParser.new do |opts|
+  opts.banner = "Welcome to Dice app! Usage: app [options]"
+  opts.on('-v', '--version', 'Display the Version') do
+    puts "You are on Version #{VERSION}"
+  end
 
-test = ComparisonApp.new("test")
-test.orphan_bank_statements = bank_statement
-# test.payslips = payslips_test_3
-p test.display_data
+  opts.on('-rNUM', '--roll=NUM', Integer, 'Number of times to roll dice') do |num|
+    options[:count] = num
+  end
 
+  opts.on('-dDICE', '--dice=DICE', Integer, 'Number of dice to roll') do |dice|
+    options[:dice] = dice
+  end
+
+  opts.on('-h', '--help', 'Display this Help') do
+    puts opts
+    exit
+  end
+end
+
+parser.parse!
+
+if options.has_key?(:count)
+  die = Dice.new
+  options[:count].times do
+    if options.has_key?(:dice)
+      total = 0
+      options[:dice].times do
+        total += die.roll
+      end
+      puts " You rolled a total of #{total}"
+    else
+      puts " You rolled a #{die.roll}"
+    end
+  end
+end
