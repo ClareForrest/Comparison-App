@@ -6,9 +6,16 @@ require 'tty-prompt'
 require 'smarter_csv'
 require 'rspec'
 require 'set'
+require 'optparse'
 
 require_relative 'comparison_app'
 
-test = ComparisonApp.new('test')
+# if ARGV == help_options
+#     help_options
+#   else 
+#     ARGV = name
+#   end 
+
+name = ComparisonApp.new(name)
 table = TTY::Table.new
-test.router
+name.router

@@ -12,6 +12,7 @@ class ComparisonApp
     @orphan_payslips = orphan_payslips = []
   end
 
+
   def menu_selection
     prompt = TTY::Prompt.new
     puts 'Welcome to the Comparison App'
@@ -59,9 +60,25 @@ class ComparisonApp
         puts 'please enter your payslip date'
         print '> '
         date = gets.chomp
+        loop do
+          if date == ""
+            puts "Invalid entry. Please enter your payslip date"
+            date = gets.chomp
+          else 
+            break
+          end 
+        end 
         puts 'please enter your payslip amount'
         print '> '
         amount = gets.chomp
+        loop do
+          if amount == ""
+            puts "Invalid entry. Please enter payslip amout"
+            amount = gets.chomp
+          else 
+            break
+          end 
+        end 
         date_hash = { date: date, amount: amount }
         @payslips << date_hash
       else
