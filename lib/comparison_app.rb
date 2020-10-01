@@ -2,7 +2,8 @@
 
 class ComparisonApp
   attr_writer :name
-  attr_reader :bank_statement, :payslips, :orphan_bank_statements, :orphan_payslips, :table
+  attr_reader :payslips, :orphan_bank_statements, :orphan_payslips, :table
+  attr_accessor :bank_statement
 
   def initialize(name)
     @name = name
@@ -45,19 +46,18 @@ class ComparisonApp
   # need to expand on the below so that the smartercsv.process becomes an actual method
   # ask user to advise on where csv file is stored. Pass this to the .process method
   def import_csv
-    begin # puts "Please enter the file path of your stored csv file"
-    # stored_file = gets
-    SmarterCSV.process('bank_statement.csv')
-    rescue 
-      puts "Please upload a bank statement for comparison in CSV format".colorize(:red)
-    end 
+    # puts "Please enter the file path of your stored csv file"
+      # user_entry = gets.chomp
+      SmarterCSV.process('/Users/clareforrest/Desktop/bs_desktop.csv')
+    # raise Errno::ENOENT
+    #   puts "Please upload a bank statement for comparison in CSV format".colorize(:red)
   end
 
   def enter_user_data
     i = @bank_statement.length
     loop do
       if @payslips[i].nil?
-        puts 'please enter your payslip date'
+        puts 'Please enter your payslip date'
         print '> '
         date = gets.chomp
         loop do
@@ -68,7 +68,7 @@ class ComparisonApp
             break
           end 
         end 
-        puts 'please enter your payslip amount'
+        puts 'Please enter your payslip amount'
         print '> '
         amount = gets.chomp
         loop do
@@ -89,20 +89,21 @@ class ComparisonApp
 
   def compare_method
     if @payslips.length.zero?
-      puts 'Please enter payslip data'
+      puts 'Payslips file empty - Cannot compare'
+      self.enter_user_data
       return
     end
     if @bank_statement.eql? @payslips
-      puts 'Data 1 matches Data 2'
+      puts '#{@name.capitalize} comparison is complete - there are no discrepancies'
     else
       i = 0
       loop do
         @payslips.each do |pdata|
           if @bank_statement[i] == pdata
-            puts 'bank and payslips match'.colorize(:green)
+            puts 'Bank and payslips match'.colorize(:green)
             next
           else
-            puts 'no match'.colorize(:red)
+            puts 'No match'.colorize(:red)
             @orphan_payslips << pdata
             @orphan_bank_statements << @bank_statement[i]
           end
@@ -129,7 +130,7 @@ class ComparisonApp
       puts "These are the dates and amounts that don't have a match".colorize(:yellow)
       puts @table.render(:ascii)
     else
-      puts "You'll need to enter data to compare"
+      puts "You'll need to enter data to compare".colorize(:yellow)
     end
   end
 end

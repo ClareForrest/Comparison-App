@@ -3,6 +3,7 @@ VERSION = '1.0.0'
 
 class KissClass
   def kiss_request 
+
   end
 end 
 
@@ -14,7 +15,11 @@ parser = OptionParser.new do |opts|
     puts "You are on Version #{VERSION}"
   end
 
-  opts.on('-kKISSES', '--kisses=KISSES', Integer, 'How many kisses would you like?') do |kisses|
+  opts.on('-nNAME', '--name=NAME', String, 'Name of Comparisons') do
+    options[:name] = name
+  end 
+
+  opts.on('-kKISSES', '--kisses=KISSES', 'How many kisses would you like?') do |kisses|
     options[:kisses] = kisses
   end
 
@@ -30,6 +35,6 @@ if options.has_key?(:kisses)
   alan = KissClass.new
   alan.kiss_request
     options[:kisses] do
-      puts "I want #{:kisses} kisses"
+      puts "I want #{:kisses[kisses]} kisses"
     end
 end
