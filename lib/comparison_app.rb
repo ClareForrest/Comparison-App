@@ -43,33 +43,37 @@ class ComparisonApp
   def compare_method
     if @payslips.length.zero?
       puts 'Payslips file empty - Cannot compare'
-      enter_user_data
+      self.enter_user_data
       return
     end
     if @bank_statement.eql? @payslips
       puts 'Comparison is complete - there are no discrepancies'
     else
-      mismatch
+      self.mismatch
     end
   end
 
-  def mismatch
+  def mismatch 
+    @orphan_bank_statements = @bank_statement
+    @orphan_payslips = @payslips
+    # matchfound == false
     i = 0
-    @payslips.each do |pdata|
-      if @bank_statement[i] == pdata
-        puts 'Bank and payslip match'.colorize(:green)
-        next
-      else
-        puts 'No match'.colorize(:red)
-        @orphan_payslips << pdata
-        @orphan_bank_statements << @bank_statement[i]
-      end
-      if i == @bank_statement.length - 1
-        break
-      else
-        i += 1
-      end
-    end
+    while i < @orphan_bank_statements.length do
+      j = 0
+      while j < @orphan_payslips.length do 
+        if @orphan_bank_statements[i] == @orphan_payslips[j]
+          puts "Match"
+          # matchfound == true
+          break 
+        else
+          j += 1
+          puts "No match"
+        end 
+        # if matchfound == false
+        # end
+      end 
+      i += 1
+    end 
   end
 
   def display_data
