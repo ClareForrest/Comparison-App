@@ -3,22 +3,19 @@ class ComparisonApp
   attr_reader :payslips, :orphan_bank_statements, :orphan_payslips, :table
   attr_accessor :bank_statement
 
-  def initialize(name)
-    @name = name
+  def initialize
     @payslips = []
     @orphan_bank_statements = []
     @orphan_payslips = []
   end
 
   def import_csv
-    begin
     puts 'Please enter the file path for the csv file you wish to use.'
     file_path = gets.chomp
     @bank_statement = SmarterCSV.process(file_path)
-    rescue Errno::ENOENT
-      puts 'Invalid file name or file path. Please re-enter'
-      retry
-    end 
+  rescue Errno::ENOENT
+    puts 'Invalid file name or file path. Please re-enter'
+    retry
   end
 
   def enter_user_data
@@ -46,13 +43,13 @@ class ComparisonApp
   def compare_method
     if @payslips.length.zero?
       puts 'Payslips file empty - Cannot compare'
-      self.enter_user_data
+      enter_user_data
       return
     end
     if @bank_statement.eql? @payslips
-      puts "#{@name.capitalize} comparison is complete - there are no discrepancies"
+      puts 'Comparison is complete - there are no discrepancies'
     else
-      self.mismatch
+      mismatch
     end
   end
 
