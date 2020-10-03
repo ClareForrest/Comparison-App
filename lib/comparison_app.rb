@@ -19,10 +19,10 @@ class ComparisonApp
 
   def enter_user_data
     !!@bank_statement
-  raise("You haven't imported a csv file yet.".colorize(:red))
+    raise("You haven't imported a csv file yet.".colorize(:red))
   rescue StandardError => e
-    puts e 
-      self.import_csv 
+    puts e
+    import_csv
     i = @bank_statement.length - 1
     loop do
       if @payslips[i].nil?
@@ -33,7 +33,7 @@ class ComparisonApp
           date = gets.chomp
           print 'Amount: '
           amount = gets.chomp.to_i
-          raise('Invalid entry. Please re-enter date and amount'.colorize(:red)) if date == '' || amount == 0
+          raise('Invalid entry. Please re-enter date and amount'.colorize(:red)) if date == '' || amount.zero?
         rescue StandardError => e
           p e
           retry
@@ -48,31 +48,31 @@ class ComparisonApp
   def compare_method
     if @payslips.length.zero?
       puts 'Payslips file empty - Cannot compare'.colorize(:red)
-      self.enter_user_data
-  elsif @bank_statement.eql? @payslips
+      enter_user_data
+    elsif @bank_statement.eql? @payslips
       puts 'Comparison is complete - there are no discrepancies'.green.blink
     else
-      self.mismatch
+      mismatch
     end
   end
 
-  def mismatch 
+  def mismatch
     @orphan_payslips = @payslips
     i = 0
-    while i < @bank_statement.length do
+    while i < @bank_statement.length
       j = 0
-      while j < @orphan_payslips.length do 
+      while j < @orphan_payslips.length
         if @bank_statement[i] == @orphan_payslips[j]
-          puts "Match".colorize(:green)
+          puts 'Match'.colorize(:green)
           @orphan_payslips.delete_at(j)
-          break 
-        end 
+          break
+        end
         j += 1
-      end 
-        puts "No match".colorize(:red)
-        @orphan_bank_statements << @bank_statement[i]
+      end
+      puts 'No match'.colorize(:red)
+      @orphan_bank_statements << @bank_statement[i]
       i += 1
-    end 
+    end
   end
 
   def display_data
