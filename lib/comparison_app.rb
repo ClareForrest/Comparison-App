@@ -1,4 +1,3 @@
-require 'byebug'
 class ComparisonApp
   attr_reader :payslips, :orphan_bank_statements, :orphan_payslips, :table
   attr_accessor :bank_statement
@@ -14,17 +13,16 @@ class ComparisonApp
     file_path = gets.chomp
     @bank_statement = SmarterCSV.process(file_path)
   rescue Errno::ENOENT
-    puts 'Invalid file name or file path. Please re-enter'
+    puts 'Invalid file name or file path. Please re-enter'.colorize(:red)
     retry
   end
 
   def enter_user_data
-  #   if @bank_statement.empty?
-  # raise("You haven't imported a csv file yet.".colorize(:red))
-  # rescue StandardError => e
-  #   puts e 
-  #     self.import_csv 
-  # end 
+    !!@bank_statement
+  raise("You haven't imported a csv file yet.".colorize(:red))
+  rescue StandardError => e
+    puts e 
+      self.import_csv 
     i = @bank_statement.length - 1
     loop do
       if @payslips[i].nil?
@@ -52,7 +50,7 @@ class ComparisonApp
       puts 'Payslips file empty - Cannot compare'.colorize(:red)
       self.enter_user_data
   elsif @bank_statement.eql? @payslips
-      puts 'Comparison is complete - there are no discrepancies'
+      puts 'Comparison is complete - there are no discrepancies'.green.blink
     else
       self.mismatch
     end
