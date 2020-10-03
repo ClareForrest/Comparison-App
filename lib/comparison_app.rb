@@ -1,5 +1,4 @@
 class ComparisonApp
-  attr_writer :name
   attr_reader :payslips, :orphan_bank_statements, :orphan_payslips, :table
   attr_accessor :bank_statement
 
@@ -23,12 +22,13 @@ class ComparisonApp
     loop do
       if @payslips[i].nil?
         begin
+          p
           puts 'Please enter your payslip date followed by the payslip amount'
           print 'Date: '
           date = gets.chomp
           print 'Amount: '
           amount = gets.chomp.to_i
-          raise('Invalid entry. Please re-enter date and amount') if date == '' || amount == ''
+          raise('Invalid entry. Please re-enter date and amount'.colorize(:red)) if date == '' || amount == 0
         rescue StandardError => e
           p e
           retry
@@ -42,11 +42,9 @@ class ComparisonApp
 
   def compare_method
     if @payslips.length.zero?
-      puts 'Payslips file empty - Cannot compare'
+      puts 'Payslips file empty - Cannot compare'.colorize(:red)
       self.enter_user_data
-      return
-    end
-    if @bank_statement.eql? @payslips
+  elsif @bank_statement.eql? @payslips
       puts 'Comparison is complete - there are no discrepancies'
     else
       self.mismatch
@@ -54,37 +52,31 @@ class ComparisonApp
   end
 
   def mismatch 
-    @orphan_bank_statements = @bank_statement
-    @orphan_payslips = @payslips
-    # matchfound == false
+    @new_bank_statement = @bank_statement.reverse
     i = 0
-    while i < @orphan_bank_statements.length do
+    while i < @bank_statement.length do
       j = 0
-      while j < @orphan_payslips.length do 
-        if @orphan_bank_statements[i] == @orphan_payslips[j]
-          puts "Match"
-          # matchfound == true
+      while j < @payslips.length do 
+        if @new_bank_statement[i] == @payslips[j]
+          puts "Match".colorize(:green)
+          @new_bank_statement.pop
           break 
         else
-          j += 1
-          puts "No match"
+          puts "No match".colorize(:red)
+          @orphan_payslips << payslips[j]
         end 
-        # if matchfound == false
-        # end
+        j += 1
       end 
       i += 1
     end 
   end
 
   def display_data
-    if @orphan_bank_statements.length > 1
-      row1 = @orphan_bank_statements.map do |statements|
-        [statements[:date], statements[:amount]]
-      end
+    if @bank_statement.length > 1
       row2 = @orphan_payslips.map do |statements|
         [statements[:date], statements[:amount]]
       end
-      @table = TTY::Table.new(rows: [row1, row2])
+      @table = TTY::Table.new(rows: [row2])
       puts "These are the dates and amounts that don't have a match".colorize(:yellow)
       puts @table.render(:ascii)
     else
