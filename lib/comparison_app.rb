@@ -1,3 +1,4 @@
+require 'byebug'
 class ComparisonApp
   attr_reader :payslips, :orphan_bank_statements, :orphan_payslips, :table
   attr_accessor :bank_statement
@@ -18,6 +19,12 @@ class ComparisonApp
   end
 
   def enter_user_data
+  #   if @bank_statement.empty?
+  # raise("You haven't imported a csv file yet.".colorize(:red))
+  # rescue StandardError => e
+  #   puts e 
+  #     self.import_csv 
+  # end 
     i = @bank_statement.length - 1
     loop do
       if @payslips[i].nil?
@@ -52,21 +59,20 @@ class ComparisonApp
   end
 
   def mismatch 
-    @new_bank_statement = @bank_statement.reverse
+    @orphan_payslips = @payslips
     i = 0
     while i < @bank_statement.length do
       j = 0
-      while j < @payslips.length do 
-        if @new_bank_statement[i] == @payslips[j]
+      while j < @orphan_payslips.length do 
+        if @bank_statement[i] == @orphan_payslips[j]
           puts "Match".colorize(:green)
-          @new_bank_statement.pop
+          @orphan_payslips.delete_at(j)
           break 
-        else
-          puts "No match".colorize(:red)
-          @orphan_payslips << payslips[j]
         end 
         j += 1
       end 
+        puts "No match".colorize(:red)
+        @orphan_bank_statements << @bank_statement[i]
       i += 1
     end 
   end
@@ -77,7 +83,7 @@ class ComparisonApp
         [statements[:date], statements[:amount]]
       end
       @table = TTY::Table.new(rows: [row2])
-      puts "These are the dates and amounts that don't have a match".colorize(:yellow)
+      puts "These are the payslips that don't have a match".colorize(:yellow)
       puts @table.render(:ascii)
     else
       puts "You'll need to enter data to compare".colorize(:yellow)
