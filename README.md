@@ -8,7 +8,7 @@ https://github.com/ClareForrest/comparison_app
 
 ## Installation and Setup
 
-1. Install ruby, I recommend using [asdf](https://asdf-vm.com/)
+1. You will need Ruby installed. I recommend using [asdf](https://asdf-vm.com/) to install 
 2. Install [git](https://git-scm.com/downloads)
 3. In the terminal `git clone` the app to your home directory
 
