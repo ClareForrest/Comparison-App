@@ -1,8 +1,8 @@
 class ComparisonMenu
   def menu_selection
     prompt = TTY::Prompt.new
-    puts 'Welcome to the Comparison App'
-    prompt.select('Please make a selection from the below') do |menu|
+    puts 'Welcome to the Comparison App'.colorize(:blue)
+    prompt.select('Please make a selection from the below'.colorize(:blue)) do |menu|
       menu.choice({ name: 'Upload CSV', value: '1' })
       menu.choice({ name: 'Enter user data', value: '2' })
       menu.choice({ name: 'Compare databases', value: '3' })
