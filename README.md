@@ -20,13 +20,13 @@ https://github.com/ClareForrest/comparison_app.git
 4. Run the `setup` executable file
 
 ```
-~/comparison_terminal_app/bin/setup
+~/comparison_app/bin/setup
 ```
 
 5. Run the `comparenow` executable to start the app
 
 ```
-~/comparison_terminal_app/bin/comparenow
+~/comparison_app/bin/comparenow
 ```
 
 ## Features
